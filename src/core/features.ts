@@ -79,7 +79,7 @@ const testSVG = (document: Document): boolean => {
 
     try {
         ctx.drawImage(img, 0, 0);
-        canvas.toDataURL();
+        canvas.toDataURL('image/png', 1);
     } catch (e) {
         return false;
     }
@@ -102,7 +102,7 @@ const testForeignObject = (document: Document): Promise<boolean> => {
     ctx.fillRect(0, 0, size, size);
 
     const img = new Image();
-    const greenImageSrc = canvas.toDataURL();
+    const greenImageSrc = canvas.toDataURL('image/png', 1);
     img.src = greenImageSrc;
     const svg = createForeignObjectSVG(size, size, 0, 0, img);
     ctx.fillStyle = 'red';

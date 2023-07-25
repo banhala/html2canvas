@@ -1,4 +1,12 @@
+import {Context} from '../core/context';
+import {DebuggerType, isDebugging} from '../core/debugger';
+import {CSSParsedCounterDeclaration, CSSParsedPseudoDeclaration} from '../css/index';
 import {Bounds} from '../css/layout/bounds';
+import {LIST_STYLE_TYPE, listStyleType} from '../css/property-descriptors/list-style-type';
+import {getQuote} from '../css/property-descriptors/quotes';
+import {isIdentToken, nonFunctionArgSeparator} from '../css/syntax/parser';
+import {TokenType} from '../css/syntax/tokenizer';
+import {CounterState, createCounterText} from '../css/types/functions/counter';
 import {
     isBodyElement,
     isCanvasElement,
@@ -7,23 +15,15 @@ import {
     isHTMLElementNode,
     isIFrameElement,
     isImageElement,
+    isSVGElementNode,
     isScriptElement,
     isSelectElement,
     isSlotElement,
     isStyleElement,
-    isSVGElementNode,
-    isTextareaElement,
     isTextNode,
+    isTextareaElement,
     isVideoElement
 } from './node-parser';
-import {isIdentToken, nonFunctionArgSeparator} from '../css/syntax/parser';
-import {TokenType} from '../css/syntax/tokenizer';
-import {CounterState, createCounterText} from '../css/types/functions/counter';
-import {LIST_STYLE_TYPE, listStyleType} from '../css/property-descriptors/list-style-type';
-import {CSSParsedCounterDeclaration, CSSParsedPseudoDeclaration} from '../css/index';
-import {getQuote} from '../css/property-descriptors/quotes';
-import {Context} from '../core/context';
-import {DebuggerType, isDebugging} from '../core/debugger';
 
 export interface CloneOptions {
     ignoreElements?: (element: Element) => boolean;
@@ -207,7 +207,7 @@ export class DocumentCloner {
         if (this.options.inlineImages && canvas.ownerDocument) {
             const img = canvas.ownerDocument.createElement('img');
             try {
-                img.src = canvas.toDataURL();
+                img.src = canvas.toDataURL('image/png', 1);
                 return img;
             } catch (e) {
                 this.context.logger.info(`Unable to inline canvas contents, canvas is tainted`, canvas);
